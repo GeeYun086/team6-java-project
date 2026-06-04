@@ -6,6 +6,12 @@ import model.Product;
 import view.MainView;
 import view.PurchaseView;
 
+// [결제 및 오류 처리 파트] 2516801 현진서
+import controller.PaymentController;
+import model.Payment;
+import model.Inventory;
+import view.PaymentView;
+
 import javax.swing.*;
 import java.util.Map;
 
@@ -28,12 +34,10 @@ public class PurchaseController {
         this.mainView = mainView;
     }
 
-    // [결제 및 오류 처리 파트 연결]
-    // PaymentController가 완성되면 아래 주석을 풀고 연결
-    // private PaymentController paymentController;
-    // public void setPaymentController(PaymentController pc) {
-    //     this.paymentController = pc;
-    // }
+    private PaymentController paymentController;
+    public void setPaymentController(PaymentController pc) {
+        this.paymentController = pc;
+    }
 
     /** 상품 1개 담기. 품절/재고 초과 시 경고 후 중단 */
     public void addToCart(Product product) {
@@ -103,16 +107,36 @@ public class PurchaseController {
         }
 
         // [결제 및 오류 처리 파트 연결]
-        // PaymentController 완성 후 아래 코드를 paymentController.processPayment(cart) 로 교체
+        int totalPrice = 0;
+        String summaryName = "";
+        int typeCount = 0;
+
         for (Map.Entry<Product, Integer> entry : items.entrySet()) {
-            entry.getKey().reduceStock(entry.getValue());
+            Product p = entry.getKey();
+            int qty = entry.getValue();
+            
+            totalPrice += p.getPrice() * qty; // 총액 계산
+            if (typeCount == 0) {
+                summaryName = p.getName();
+            }
+            typeCount++;
+            
+            entry.getKey().reduceStock(entry.getValue()); 
         }
+        
+        if (typeCount > 1) {
+            summaryName += " 외 " + (typeCount - 1) + "건";
+        }
+
+        // 결제창 화면 띄우기
+        Payment paymentModel = new Payment(totalPrice);
+        Inventory inventoryModel = new Inventory(); // 재고 검증은 위에서 끝났으므로 더미 값 전달
+        PaymentView paymentView = new PaymentView(summaryName, totalPrice);
+        
+        this.paymentController = new PaymentController(paymentModel, inventoryModel, paymentView, summaryName);
+        paymentView.setVisible(true);
 
         cart.clear();
         mainView.refresh();
-
-        // [결제 및 오류 처리 파트 연결]
-        // 결제 완료 메시지도 PaymentView에서 처리하는 방식으로 교체
-        mainView.showMessage("결제가 완료되었습니다!\n상품을 꺼내 가세요.");
     }
 }

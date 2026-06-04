@@ -1,7 +1,8 @@
-//PaymentView.java 2516801 현진서
+// PaymentView.java 2516801 현진서
 package view;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
@@ -16,60 +17,93 @@ public class PaymentView extends JFrame {
     private JButton payButton;
     private JTextArea receiptArea;
 
+    // 메인 테마 색상 설정
+    private final Color bgColor = new Color(24, 30, 49); // 메인 배경색 (다크 네이비)
+    private final Color panelBgColor = new Color(34, 42, 69); // 패널 배경색
+    private final Color textColor = Color.WHITE; // 기본 텍스트 색상
+    private final Color accentColor = new Color(255, 215, 0); // 강조 색상 (골드/옐로우)
+    private final Color buttonColor = new Color(66, 133, 244); // 버튼 색상 (블루)
+
     // 생성자를 통해 의존성을 주입받아 초기 화면을 동적으로 구성합니다.
     public PaymentView(String productName, int totalAmount) {
         setTitle("자판기 결제 시스템");
         setSize(400, 530); 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-        ((JPanel)getContentPane()).setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 메인 화면 종료 방지
+        
+        // 전체 배경 패널 설정
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        mainPanel.setBackground(bgColor);
+        setContentPane(mainPanel);
 
         // 1. 최상단 선택 상품 라벨
         productLabel = new JLabel("선택한 상품: " + productName, SwingConstants.CENTER);
         productLabel.setFont(new Font("맑은 고딕", Font.BOLD, 16));
-        productLabel.setForeground(Color.DARK_GRAY);
+        productLabel.setForeground(textColor);
         productLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         
         // 2. 결제할 금액 라벨
         totalAmountLabel = new JLabel("결제할 금액: " + totalAmount + "원", SwingConstants.CENTER);
         totalAmountLabel.setFont(new Font("맑은 고딕", Font.BOLD, 22));
+        totalAmountLabel.setForeground(accentColor); // 강조 색상 적용
         totalAmountLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         
         // 3. 투입할 금액 입력 폼
         JPanel inputPanel = new JPanel(new BorderLayout());
-        inputPanel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(Color.LIGHT_GRAY), "투입할 금액(숫자만 입력)"));
+        inputPanel.setBackground(bgColor);
+        TitledBorder inputBorder = BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(Color.LIGHT_GRAY), "투입할 금액(숫자만 입력)");
+        inputBorder.setTitleColor(textColor);
+        inputPanel.setBorder(inputBorder);
+        
         inputMoneyField = new JTextField();
-        inputMoneyField.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+        inputMoneyField.setFont(new Font("맑은 고딕", Font.PLAIN, 18));
+        inputMoneyField.setBackground(panelBgColor);
+        inputMoneyField.setForeground(textColor);
+        inputMoneyField.setCaretColor(textColor); // 커서 색상도 흰색으로
+        inputMoneyField.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         inputPanel.add(inputMoneyField, BorderLayout.CENTER);
 
         // 4. 결제하기 버튼
         payButton = new JButton("결제하기");
         payButton.setFont(new Font("맑은 고딕", Font.BOLD, 18));
-        payButton.setBackground(new Color(70, 130, 180));
+        payButton.setBackground(buttonColor);
         payButton.setForeground(Color.WHITE);
         payButton.setFocusPainted(false);
+        payButton.setBorderPainted(false); // 테두리 제거로 깔끔하게
         payButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+        payButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // 5. 하단 영수증 출력 폼
         JPanel receiptPanel = new JPanel(new BorderLayout());
-        receiptPanel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(Color.LIGHT_GRAY), "결제 내역 / 영수증"));
+        receiptPanel.setBackground(bgColor);
+        TitledBorder receiptBorder = BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(Color.LIGHT_GRAY), "결제 내역 / 영수증");
+        receiptBorder.setTitleColor(textColor);
+        receiptPanel.setBorder(receiptBorder);
+        
         receiptArea = new JTextArea(10, 20);
-        receiptArea.setFont(new Font("Monospaced", Font.PLAIN, 16));
+        receiptArea.setFont(new Font("Monospaced", Font.PLAIN, 15));
+        receiptArea.setBackground(panelBgColor);
+        receiptArea.setForeground(textColor);
         receiptArea.setEditable(false); // 사용자가 임의로 영수증을 조작할 수 없도록 방어
-        receiptPanel.add(new JScrollPane(receiptArea), BorderLayout.CENTER);
+        receiptArea.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
+        JScrollPane scrollPane = new JScrollPane(receiptArea);
+        scrollPane.setBorder(null); // 스크롤 안쪽 테두리 제거
+        receiptPanel.add(scrollPane, BorderLayout.CENTER);
 
         // 컴포넌트 조립
-        add(productLabel);
-        add(Box.createRigidArea(new Dimension(0, 5))); 
-        add(totalAmountLabel);
-        add(Box.createRigidArea(new Dimension(0, 15)));
-        add(inputPanel);
-        add(Box.createRigidArea(new Dimension(0, 10)));
-        add(payButton);
-        add(Box.createRigidArea(new Dimension(0, 15)));
-        add(receiptPanel);
+        mainPanel.add(productLabel);
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 10))); 
+        mainPanel.add(totalAmountLabel);
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        mainPanel.add(inputPanel);
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+        mainPanel.add(payButton);
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        mainPanel.add(receiptPanel);
 
         setLocationRelativeTo(null);
     }
