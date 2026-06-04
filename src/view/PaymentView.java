@@ -17,12 +17,12 @@ public class PaymentView extends JFrame {
     private JButton payButton;
     private JTextArea receiptArea;
 
-    // 메인 테마 색상 설정
-    private final Color bgColor = new Color(24, 30, 49); // 메인 배경색 (다크 네이비)
-    private final Color panelBgColor = new Color(34, 42, 69); // 패널 배경색
-    private final Color textColor = Color.WHITE; // 기본 텍스트 색상
-    private final Color accentColor = new Color(255, 215, 0); // 강조 색상 (골드/옐로우)
-    private final Color buttonColor = new Color(66, 133, 244); // 버튼 색상 (블루)
+    
+    private final Color bgColor = new Color(24, 30, 49); 
+    private final Color panelBgColor = new Color(34, 42, 69); 
+    private final Color textColor = Color.WHITE; 
+    private final Color accentColor = new Color(255, 215, 0); 
+    private final Color buttonColor = new Color(66, 133, 244); 
 
     // 생성자를 통해 의존성을 주입받아 초기 화면을 동적으로 구성합니다.
     public PaymentView(String productName, int totalAmount) {
