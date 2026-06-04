@@ -24,7 +24,7 @@ public class App {
             // 1. 구매(장바구니) 컨트롤러 세팅
             PurchaseController controller = new PurchaseController(cart);
 
-            // [결제 파트 연결 안내] 2516801 현진서
+            // [결제 파트 연결] 2516801 현진서
             // 결제창(PaymentController)은 장바구니 총액이 필요하므로, 
             // 프로그램 시작 시점이 아니라 PurchaseController에서 결제 버튼을 누를 때 생성됩니다.
 
