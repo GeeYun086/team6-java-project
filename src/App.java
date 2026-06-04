@@ -3,6 +3,11 @@ import controller.PurchaseController;
 import model.Cart;
 import model.Product;
 import view.MainView;
+// 관리자 시스템 관련 클래스 추가 2514747 정유진
+import controller.AdminController;
+import model.InventoryManager;
+import model.SalesManager;
+import view.AdminView;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -23,20 +28,22 @@ public class App {
             // PaymentController paymentController = new PaymentController(cart, products);
             // controller.setPaymentController(paymentController);
 
-            // [관리자 시스템 파트 연결]
+            // [관리자 시스템 파트 연결] 2514747 정유진
             // products 리스트를 그대로 넘겨야 세 파트가 같은 재고 데이터를 공유
-            // InventoryManager inventoryManager = new InventoryManager(products);
-            // AdminController adminController = new AdminController(inventoryManager, ...);
-
+            InventoryManager inventoryManager = new InventoryManager(products);
+            SalesManager salesManager = new SalesManager();
+            AdminController adminController = new AdminController(inventoryManager, salesManager);
+               
             MainView mainView = new MainView(controller, products, cart);
             controller.setMainView(mainView);
 
-            // [관리자 시스템 파트 연결]
+            // [관리자 시스템 파트 연결] 2514747 정유진
             // MainView에 관리자 버튼을 추가하고 AdminController를 연결
-            // mainView.setAdminController(adminController);
-
+            mainView.setAdminController(adminController);
+           
             mainView.refresh();
             mainView.setVisible(true);
+
         });
     }
 

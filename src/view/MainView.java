@@ -4,6 +4,7 @@ package view;
 import controller.PurchaseController;
 import model.Cart;
 import model.Product;
+import controller.AdminController;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -26,6 +27,7 @@ public class MainView extends JFrame implements ViewInterface {
     private final PurchaseController controller;
     private final List<Product> products;
     private final Cart cart;
+    private AdminController adminController;
 
     // 갱신이 필요한 UI 컴포넌트
     private JPanel    productGridPanel;  // 상품 카드 그리드 영역
@@ -69,6 +71,11 @@ public class MainView extends JFrame implements ViewInterface {
         loadProductIcons();
         initFrame();
         buildUI();
+    }
+
+    // 관리자 시스템 연결 메서드(AdminController를 전달받아 저장) 2514747 정유진
+    public void setAdminController(AdminController adminController) {
+        this.adminController = adminController;
     }
 
     /** resources의 PNG 아이콘을 56x56으로 로드해 productIcons에 저장 */
@@ -355,15 +362,26 @@ public class MainView extends JFrame implements ViewInterface {
 
         JButton purchaseBtn = buildActionButton("결제하기", C_BLUE);
         JButton cancelBtn   = buildActionButton("전체 취소", C_RED);
-
+        // 관리자 버튼 추가 2514747 정유진
+        JButton adminBtn    = buildActionButton("관리자", C_GREEN);
+ 
         purchaseBtn.addActionListener(e -> controller.requestPurchase());
         cancelBtn.addActionListener(e -> controller.cancelCart());
+        // 관리자 버튼 클릭 시 AdminView 열기 2514747 정유진
+        adminBtn.addActionListener(e -> {
+
+            AdminView adminView =
+                    new AdminView(adminController);
+
+            adminView.setVisible(true);
+        });
 
         bottom.add(sep);
         bottom.add(totalLabel);
         bottom.add(purchaseBtn);
         bottom.add(Box.createVerticalStrut(6));
         bottom.add(cancelBtn);
+        bottom.add(adminBtn);
 
         panel.add(title,  BorderLayout.NORTH);
         panel.add(scroll, BorderLayout.CENTER);
