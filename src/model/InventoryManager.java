@@ -40,6 +40,25 @@ public class InventoryManager {
         }
     }
 
+    /**
+     * 재고 부족 상품 조회
+     * 기준: 재고 2개 이하
+     */
+    public List<Product> getLowStockProducts() {
+
+        List<Product> lowStockProducts =
+                new ArrayList<>();
+
+        // 전체 상품을 순회하며 재고 부족 상품 검색
+        for (Product p : products) {
+
+            if (p.getStock() <= 2 && p.getStock() > 0) {
+                lowStockProducts.add(p);
+            }
+        }
+
+        return lowStockProducts;
+    }
     /** 품절 상품 목록 반환 */
     public List<Product> getOutOfStockProducts() {
 
