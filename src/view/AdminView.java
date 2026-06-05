@@ -102,13 +102,13 @@ public class AdminView extends JFrame {
         outOfStockButton.addActionListener(
                 e -> showOutOfStockProducts());
 
-        // 재고 보충
-        restockButton.addActionListener(
-                e -> restockProduct());
-
         // 재고 부족 상품 조회
         lowStockButton.addActionListener(
                 e -> showLowStockProducts());
+
+        // 재고 보충
+        restockButton.addActionListener(
+                e -> restockProduct());
 
         // 판매 기록 조회
         salesButton.addActionListener(
@@ -180,6 +180,36 @@ public class AdminView extends JFrame {
         }
     }
 
+    /** 재고 부족 상품 출력 */
+    private void showLowStockProducts() {
+
+        displayArea.setText("");
+
+        List<Product> products =
+                controller.getLowStockProducts();
+
+        if (products.isEmpty()) {
+
+            displayArea.append(
+                    "재고 부족 상품이 없습니다.\n");
+
+            return;
+        }
+
+        for (Product p : products) {
+
+            displayArea.append(
+                    p.getId()
+                            + " / "
+                            + p.getName()
+                            + " / "
+                            + p.getPrice()
+                            + "원 / 재고 "
+                            + p.getStock()
+                            + "개\n");
+        }
+    }
+
     /** 재고 보충 */
     private void restockProduct() {
 
@@ -231,36 +261,6 @@ public class AdminView extends JFrame {
             JOptionPane.showMessageDialog(
                     this,
                     "유효한 숫자를 입력하세요.");
-        }
-    }
-
-    /** 재고 부족 상품 출력 */
-    private void showLowStockProducts() {
-
-        displayArea.setText("");
-
-        List<Product> products =
-                controller.getLowStockProducts();
-
-        if (products.isEmpty()) {
-
-            displayArea.append(
-                    "재고 부족 상품이 없습니다.\n");
-
-            return;
-        }
-
-        for (Product p : products) {
-
-            displayArea.append(
-                    p.getId()
-                            + " / "
-                            + p.getName()
-                            + " / "
-                            + p.getPrice()
-                            + "원 / 재고 "
-                            + p.getStock()
-                            + "개\n");
         }
     }
 
