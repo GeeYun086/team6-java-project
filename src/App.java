@@ -20,18 +20,18 @@ public class App {
             List<Product> products = createProducts();
             Cart cart = new Cart();
 
-            // 1. 구매(장바구니) 컨트롤러 세팅 (지윤 님 원본 형태 유지)
+            // 1. 구매(장바구니) 컨트롤러 세팅 
             PurchaseController purchaseController = new PurchaseController(cart);
 
-            // 2. 관리자 시스템 파트 데이터 매니저 생성 (유진 님 파트)
+            // 2. 관리자 시스템 파트 데이터 매니저 생성 
             InventoryManager inventoryManager = new InventoryManager(products);
             SalesManager salesManager = new SalesManager();
             AdminController adminController = new AdminController(inventoryManager, salesManager);
                
-            // 3. 결제 시스템 파트 생성 및 의존성 연결 (진서 님 파트)
+            // 3. 결제 시스템 파트 생성 및 의존성 연결 
             ErrorMessageView errorMessageView = new ErrorMessageView();
             
-            // ★ 수정된 부분: inventoryManager를 빼고 인자를 2개만 넘깁니다!
+            
             PaymentController paymentController = new PaymentController(salesManager, errorMessageView);
             
             // PurchaseController에 완수된 결제 컨트롤러 주입
