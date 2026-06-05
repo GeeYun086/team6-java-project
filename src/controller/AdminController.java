@@ -8,11 +8,11 @@ import model.SalesManager;
 import model.SalesRecord;
 
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  * 관리자 기능을 제어하는 컨트롤러
- * 재고 조회, 재고 보충, 판매 기록 조회를 담당
- * View와 Model 사이의 중간 역할 수행
+ * 재고 조회, 재고 보충, 판매 기록 조회
  */
 
 public class AdminController {
@@ -34,20 +34,59 @@ public class AdminController {
         return inventoryManager.getProducts();
     }
 
+    /**재고 부족 상품 조회
+     * InventoryManager에 요청
+     */
+    public List<Product> getLowStockProducts() {
+
+        return inventoryManager.getLowStockProducts();
+    }
+
     /** 품절 상품 목록 반환 */
     public List<Product> getOutOfStockProducts() {
 
         return inventoryManager.getOutOfStockProducts();
     }
 
+    public boolean existsProductName(String productName) {
+
+        for (Product p : inventoryManager.getProducts()) {
+
+            if (p.getName().equals(productName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /** 특정 상품 재고 보충 */
     public void restockProduct(
             String productId,
             int amount) {
+            inventoryManager.restockProduct(productId, amount);
+    }
 
-        inventoryManager.restockProduct(
-                productId,
-                amount);
+    /**
+    * 상품명으로 재고 보충
+    * 성공 시 true
+    * 실패 시 false
+    */
+    public boolean restockProductByName(
+            String productName,
+            int amount) {
+
+        productName = productName.trim();
+
+        for (Product p : inventoryManager.getProducts()) {
+
+            if (p.getName().equals(productName)) {
+                p.restoreStock(amount);           
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /** 판매 기록 추가 */
