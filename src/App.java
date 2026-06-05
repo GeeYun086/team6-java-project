@@ -1,13 +1,12 @@
-// App.java 2216899 정지윤 & 2514747 정유진 & 2516801 현진서 통합
 import controller.PurchaseController;
+import controller.PaymentController;
+import controller.AdminController;
 import model.Cart;
 import model.Product;
-import view.MainView;
-
-import controller.AdminController;
 import model.InventoryManager;
 import model.SalesManager;
-import view.AdminView;
+import view.MainView;
+import view.ErrorMessageView;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -21,18 +20,26 @@ public class App {
             List<Product> products = createProducts();
             Cart cart = new Cart();
 
-            // 1. 구매(장바구니) 컨트롤러 세팅
-            PurchaseController controller = new PurchaseController(cart);
+            // 1. 구매(장바구니) 컨트롤러 세팅 (지윤 님 원본 형태 유지)
+            PurchaseController purchaseController = new PurchaseController(cart);
 
-
-            // 2. 관리자 시스템 파트 연결 2514747 정유진
+            // 2. 관리자 시스템 파트 데이터 매니저 생성 (유진 님 파트)
             InventoryManager inventoryManager = new InventoryManager(products);
             SalesManager salesManager = new SalesManager();
             AdminController adminController = new AdminController(inventoryManager, salesManager);
                
-            // 3. 메인 화면 세팅
-            MainView mainView = new MainView(controller, products, cart);
-            controller.setMainView(mainView);
+            // 3. 결제 시스템 파트 생성 및 의존성 연결 (진서 님 파트)
+            ErrorMessageView errorMessageView = new ErrorMessageView();
+            
+            // ★ 수정된 부분: inventoryManager를 빼고 인자를 2개만 넘깁니다!
+            PaymentController paymentController = new PaymentController(salesManager, errorMessageView);
+            
+            // PurchaseController에 완수된 결제 컨트롤러 주입
+            purchaseController.setPaymentController(paymentController);
+
+            // 4. 메인 화면 세팅 및 상호 참조 매핑
+            MainView mainView = new MainView(purchaseController, products, cart);
+            purchaseController.setMainView(mainView);
             mainView.setAdminController(adminController);
            
             mainView.refresh();
