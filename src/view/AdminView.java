@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * 관리자 화면
- * 재고 조회, 품절 상품 조회,
+ * 전체 재고 조회, 품절 상품 조회, 재고 부족 상품 조회
  * 재고 보충, 판매 기록 조회 기능 제공
  */
 public class AdminView extends JFrame {
@@ -33,7 +33,7 @@ public class AdminView extends JFrame {
         this.controller = controller;
 
         setTitle("관리자 시스템");
-        setSize(600, 500);
+        setSize(800, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 관리자창만 닫히도록 수정
 
         // 전체 배경 패널 (디자인 추가)
@@ -72,6 +72,9 @@ public class AdminView extends JFrame {
         JButton restockButton =
                 createStyledButton("재고 보충");
 
+        JButton lowStockButton =
+                createStyledButton("재고 부족 상품 조회");
+
         JButton salesButton =
                 createStyledButton("판매 기록 조회");
 
@@ -81,6 +84,7 @@ public class AdminView extends JFrame {
 
         buttonPanel.add(inventoryButton);
         buttonPanel.add(outOfStockButton);
+        buttonPanel.add(lowStockButton);
         buttonPanel.add(restockButton);
         buttonPanel.add(salesButton);
 
@@ -101,6 +105,10 @@ public class AdminView extends JFrame {
         // 재고 보충
         restockButton.addActionListener(
                 e -> restockProduct());
+
+        // 재고 부족 상품 조회
+        lowStockButton.addActionListener(
+                e -> showLowStockProducts());
 
         // 판매 기록 조회
         salesButton.addActionListener(
@@ -129,6 +137,10 @@ public class AdminView extends JFrame {
                 controller.getProducts();
 
         for (Product p : products) {
+             System.out.println(
+                p.getName() 
+                + "현재 재고 = " 
+                + p.getStock());
 
             displayArea.append(
                     p.getId()
@@ -161,23 +173,36 @@ public class AdminView extends JFrame {
         for (Product p : products) {
 
             displayArea.append(
-                    p.getName()
-                            + " (품절)\n");
+                        p.getId()
+                        + " / "
+                        + p.getName()
+                        + " (품절)\n");
         }
     }
 
     /** 재고 보충 */
     private void restockProduct() {
 
-        String productId =
+        String productName =
                 JOptionPane.showInputDialog(
                         this,
-                        "재고를 보충할 상품 ID를 입력하세요.");
+                        "재고를 보충할 상품명을 입력하세요.");
 
-        if (productId == null ||
-                productId.trim().isEmpty()) {
+        if (productName == null ||
+                productName.trim().isEmpty()) {
 
             return;
+        }
+
+        if (!controller.existsProductName(productName)) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "존재하지 않는 상품명입니다.",
+                        "입력 오류",
+                        JOptionPane.ERROR_MESSAGE);
+
+                return;
         }
 
         String amountText =
@@ -195,17 +220,11 @@ public class AdminView extends JFrame {
 
             int amount =
                     Integer.parseInt(amountText);
-
-            controller.restockProduct(
-                    productId,
+            controller.restockProductByName(
+                    productName,
                     amount);
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "재고 보충 완료");
-
-            // 보충 후 전체 재고 다시 표시
-            showAllProducts();
+           
 
         } catch (NumberFormatException e) {
 
@@ -215,15 +234,40 @@ public class AdminView extends JFrame {
         }
     }
 
-    /** 판매 기록 조회 */
+    /** 재고 부족 상품 출력 */
+    private void showLowStockProducts() {
+
+        displayArea.setText("");
+
+        List<Product> products =
+                controller.getLowStockProducts();
+
+        if (products.isEmpty()) {
+
+            displayArea.append(
+                    "재고 부족 상품이 없습니다.\n");
+
+            return;
+        }
+
+        for (Product p : products) {
+
+            displayArea.append(
+                    p.getId()
+                            + " / "
+                            + p.getName()
+                            + " / "
+                            + p.getPrice()
+                            + "원 / 재고 "
+                            + p.getStock()
+                            + "개\n");
+        }
+    }
+
+    //**판매 기록 조회 */
     private void showSalesRecords() {
-
-        List<SalesRecord> records =
-                controller.getSalesRecords();
-
-        SalesRecordView view =
-                new SalesRecordView(records);
-
-        view.setVisible(true);
+        List<SalesRecord> records = controller.getSalesRecords();
+        SalesRecordView recordView = new SalesRecordView(records);
+        recordView.setVisible(true);
     }
 }
