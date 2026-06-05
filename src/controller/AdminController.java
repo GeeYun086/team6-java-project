@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 
 /**
  * 관리자 기능을 제어하는 컨트롤러
- * 재고 조회, 재고 보충, 판매 기록 조회
+ * 재고 조회, 재고 부족 상품 조회, 품절 상품 조회 재고 보충, 판매 기록 조회
  */
 
 public class AdminController {
@@ -48,6 +48,7 @@ public class AdminController {
         return inventoryManager.getOutOfStockProducts();
     }
 
+    /** 상품명으로 재고 보충 가능 여부 확인 */
     public boolean existsProductName(String productName) {
 
         for (Product p : inventoryManager.getProducts()) {
@@ -59,14 +60,7 @@ public class AdminController {
 
         return false;
     }
-
-    /** 특정 상품 재고 보충 */
-    public void restockProduct(
-            String productId,
-            int amount) {
-            inventoryManager.restockProduct(productId, amount);
-    }
-
+    
     /**
     * 상품명으로 재고 보충
     * 성공 시 true
