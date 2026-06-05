@@ -26,13 +26,13 @@ public class InventoryManager {
 
     /** 특정 상품의 재고를 보충 */
     public void restockProduct(
-            String productId,
+            String productName,
             int amount) {
 
         for (Product p : products) {
 
-            // 상품 ID가 일치하면 재고 보충
-            if (p.getId().equals(productId)) {
+            // 상품명이 일치하면 재고 보충
+            if (p.getId().equals(productName)) {
 
                 p.restoreStock(amount);
                 return;
