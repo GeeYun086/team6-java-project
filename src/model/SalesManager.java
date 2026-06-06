@@ -36,12 +36,6 @@ public class SalesManager {
         return records;
     }
 
-    /** 판매 기록 개수 반환 */
-    public int getRecordCount() {
-
-        return records.size();
-    }
-
     /** 판매 기록 파일 저장 */
     public void saveToFile() {
 
