@@ -12,7 +12,6 @@ import java.util.List;
  * 판매 기록 조회 화면
  * 판매된 상품 내역을 관리자에게 표시
  */
-
 public class SalesRecordView extends JFrame {
 
     private JTextArea recordArea;
