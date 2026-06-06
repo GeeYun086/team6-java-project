@@ -58,13 +58,8 @@ public class SalesRecordView extends JFrame {
         for (SalesRecord record : records) {
 
             recordArea.append(
-                    record.getProductName()
-                            + " / "
-                            + record.getQuantity()
-                            + "개 / "
-                            + record.getSaleTime()
-                            + "\n"
-            );
+                record.toString()
+                        + "\n");
         }
     }
 }
