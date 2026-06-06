@@ -117,7 +117,7 @@ public class AdminView extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    // 버튼 디자인 통일용 헬퍼 메서드 (디자인 추가)
+    // 버튼 디자인 메서드
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
         button.setFont(new Font("맑은 고딕", Font.BOLD, 14));
@@ -253,8 +253,6 @@ public class AdminView extends JFrame {
             controller.restockProductByName(
                     productName,
                     amount);
-
-           
 
         } catch (NumberFormatException e) {
 
