@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * 관리자용 재고 관리 클래스
- * 전체 상품 목록을 관리하며 재고 부족 상품 및 품절 상품 조회 기능 제공
+ * 전체 상품 목록을 관리하며 재고 보충 및 재고 부족, 품절 상품 조회 기능 제공
  * Product 객체를 직접 공유하여 구매 시스템과 동일한 재고 데이터를 사용
  */
 
@@ -24,6 +24,26 @@ public class InventoryManager {
         return products;
     }
 
+    /** 
+    * 상품명으로 특정 상품의 재고를 보충
+    * 성공 시 true, 일치하는 상품이 없으면 false
+    */
+    public boolean restockProduct(String productName, int amount) {
+
+        productName = productName.trim();
+
+        for (Product p : products) {
+
+            // 상품명이 일치하면 재고 보충
+            if (p.getName().equals(productName)) {
+                p.restoreStock(amount);
+                return true;
+            }
+        }
+
+    return false;
+}
+    
     /**
      * 재고 부족 상품 반환
      * 기준: 재고 2개 이하
@@ -43,6 +63,7 @@ public class InventoryManager {
 
         return lowStockProducts;
     }
+    
     /** 품절 상품 목록 반환 */
     public List<Product> getOutOfStockProducts() {
 
