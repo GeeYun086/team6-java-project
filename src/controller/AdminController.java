@@ -60,26 +60,13 @@ public class AdminController {
         return false;
     }
     
-    /**
-    * 상품명으로 재고 보충
-    * 성공 시 true
-    * 실패 시 false
+    /** 상품명으로 재고 보충
+    * 실제 보충은 InventoryManager에 위임
+    * 성공 시 true, 실패 시 false
     */
-    public boolean restockProductByName(
-            String productName,
-            int amount) {
+    public boolean restockProductByName(String productName, int amount) {
 
-        productName = productName.trim();
-
-        for (Product p : inventoryManager.getProducts()) {
-
-            if (p.getName().equals(productName)) {
-                p.restoreStock(amount);           
-                return true;
-            }
-        }
-
-        return false;
+        return inventoryManager.restockProduct(productName, amount);
     }
 
     /** 판매 기록 추가 */
