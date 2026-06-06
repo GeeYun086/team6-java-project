@@ -53,6 +53,7 @@ public class AdminController {
         for (Product p : inventoryManager.getProducts()) {
 
             if (p.getName().equals(productName)) {
+                
                 return true;
             }
         }
