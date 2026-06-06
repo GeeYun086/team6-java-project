@@ -10,7 +10,6 @@ import java.util.List;
  * 전체 상품 목록을 관리하며 재고 보충 및 재고 부족, 품절 상품 조회 기능 제공
  * Product 객체를 직접 공유하여 구매 시스템과 동일한 재고 데이터를 사용
  */
-
 public class InventoryManager {
 
     private List<Product> products;
@@ -21,6 +20,7 @@ public class InventoryManager {
 
     /** 전체 상품 목록 반환 */
     public List<Product> getProducts() {
+        
         return products;
     }
 
@@ -37,6 +37,7 @@ public class InventoryManager {
             // 상품명이 일치하면 재고 보충
             if (p.getName().equals(productName)) {
                 p.restoreStock(amount);
+                
                 return true;
             }
         }
