@@ -8,7 +8,6 @@ import model.SalesManager;
 import model.SalesRecord;
 
 import java.util.List;
-import javax.swing.JOptionPane;
 
 /**
  * 관리자 기능을 제어하는 컨트롤러
