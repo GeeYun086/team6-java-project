@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
  * 상품명, 판매 수량, 판매 시각을 저장
  * 판매 기록 1건을 객체로 표현
  */
-
 public class SalesRecord {
 
     private String productName;
