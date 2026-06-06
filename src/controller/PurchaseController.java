@@ -29,7 +29,6 @@ public class PurchaseController {
     }
 
     // [결제 및 오류 처리 파트 연결] - 2516801 현진서
-    // PaymentController가 완성되면 아래 주석을 풀고 연결
     private PaymentController paymentController;
     public void setPaymentController(PaymentController pc) {
          this.paymentController = pc;
@@ -109,7 +108,6 @@ public class PurchaseController {
         }
 
         // [결제 및 오류 처리 파트 연결]- 2516801 현진서
-        // PaymentController 완성 후 아래 코드를 paymentController.processPayment(cart) 로 교체
         for (Map.Entry<Product, Integer> entry : items.entrySet()) {
             entry.getKey().reduceStock(entry.getValue());
         }
@@ -118,7 +116,6 @@ public class PurchaseController {
         mainView.refresh();
 
         // [결제 및 오류 처리 파트 연결]- 2516801 현진서
-        // 결제 완료 메시지도 PaymentView에서 처리하는 방식으로 교체
         mainView.showMessage("결제가 완료되었습니다!\n상품을 꺼내 가세요.");
     }
 }
