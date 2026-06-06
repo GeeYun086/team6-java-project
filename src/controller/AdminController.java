@@ -13,7 +13,6 @@ import java.util.List;
  * 관리자 기능을 제어하는 컨트롤러
  * 재고 조회, 재고 부족 상품 조회, 품절 상품 조회 재고 보충, 판매 기록 조회
  */
-
 public class AdminController {
 
     private InventoryManager inventoryManager;
@@ -33,7 +32,8 @@ public class AdminController {
         return inventoryManager.getProducts();
     }
 
-    /**재고 부족 상품 조회
+    /**
+     * 재고 부족 상품 조회
      * InventoryManager에 요청
      */
     public List<Product> getLowStockProducts() {
@@ -60,10 +60,11 @@ public class AdminController {
         return false;
     }
     
-    /** 상품명으로 재고 보충
-    * 실제 보충은 InventoryManager에 위임
-    * 성공 시 true, 실패 시 false
-    */
+    /** 
+     * 상품명으로 재고 보충
+     * 실제 보충은 InventoryManager에 위임
+     * 성공 시 true, 실패 시 false
+     */
     public boolean restockProductByName(String productName, int amount) {
 
         return inventoryManager.restockProduct(productName, amount);
