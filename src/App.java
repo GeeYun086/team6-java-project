@@ -1,3 +1,4 @@
+// App.java 2514747 정유진, 2516801 현진서, 2216899 정지윤 공통 작성
 import controller.PurchaseController;
 import controller.PaymentController;
 import controller.AdminController;
